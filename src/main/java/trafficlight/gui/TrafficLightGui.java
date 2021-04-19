@@ -1,15 +1,13 @@
 package trafficlight.gui;
 
-import trafficlight.Observer;
 import trafficlight.ctrl.TrafficLightCtrl;
-import trafficlight.states.State;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class TrafficLightGui extends JFrame implements ActionListener, Observer {
+public class TrafficLightGui extends JFrame implements ActionListener {
 
     public static final String ACTION_COMMAND_STOP = "stop";
 
@@ -22,7 +20,6 @@ public class TrafficLightGui extends JFrame implements ActionListener, Observer 
     private TrafficLight red = null;
 
     private TrafficLightCtrl trafficLightCtrl = null;
-
 
     public TrafficLightGui(TrafficLightCtrl ctrl){
         super(NAME_OF_THE_GAME);
@@ -37,7 +34,9 @@ public class TrafficLightGui extends JFrame implements ActionListener, Observer 
         yellow = new TrafficLight(Color.yellow);
         green = new TrafficLight(Color.green);
 
-        trafficLightCtrl.addObserver(this);
+        ctrl.getGreenState().addObserver(green);
+        ctrl.getRedState().addObserver(red);
+        ctrl.getYellowState().addObserver(yellow);
 
         //create the TrafficLight
         //connect subject and observer
@@ -63,7 +62,6 @@ public class TrafficLightGui extends JFrame implements ActionListener, Observer 
         pack();
     }
 
-
     public void showErrorMessage(Exception e) {
         JOptionPane pane = new JOptionPane();
         JDialog dialog = pane.createDialog(this, "Traffic Light Problem");
@@ -73,23 +71,6 @@ public class TrafficLightGui extends JFrame implements ActionListener, Observer 
     public void actionPerformed(ActionEvent e){
         if (ACTION_COMMAND_STOP.equals(e.getActionCommand())){
            trafficLightCtrl.stop();
-        }
-    }
-
-    @Override
-    public void update(State state) {
-        if (state.getColor().equals("red")) {
-            red.turnOn(true);
-            yellow.turnOn(false);
-            green.turnOn(false);
-        } else if (state.getColor().equals("yellow")){
-            red.turnOn(false);
-            yellow.turnOn(true);
-            green.turnOn(false);
-        } else {
-            red.turnOn(false);
-            yellow.turnOn(false);
-            green.turnOn(true);
         }
     }
 }

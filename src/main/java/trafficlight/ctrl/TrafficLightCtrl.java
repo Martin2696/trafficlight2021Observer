@@ -28,7 +28,7 @@ public class TrafficLightCtrl extends Subject {
         gui = new TrafficLightGui(this);
         gui.setVisible(true);
         //TODO useful to update the current state
-        this.notifyObservers(currentState);
+        currentState.notifyObservers();
     }
 
     public static TrafficLightCtrl getInstance() {
@@ -43,8 +43,10 @@ public class TrafficLightCtrl extends Subject {
             @Override
             public State getNextState() {
                 previousState = currentState;
-                notifyObservers(currentState);
+                yellowState.notifyObservers();
+                notifyObservers();
                 //TODO useful to update the current state and the old one
+                //System.out.println ("The state of the target changed to yellow");
                 return yellowState;
             }
             @Override
@@ -57,8 +59,10 @@ public class TrafficLightCtrl extends Subject {
             @Override
             public State getNextState() {
                 previousState = currentState;
-                notifyObservers(currentState);
+                yellowState.notifyObservers();
+                notifyObservers();
                 //TODO useful to update the current state and the old one
+                //System.out.println ("The state of the target changed to yellow");
                 return yellowState;
             }
             @Override
@@ -72,13 +76,17 @@ public class TrafficLightCtrl extends Subject {
             public State getNextState() {
                 if (previousState.equals(greenState)) {
                     previousState = currentState;
-                    notifyObservers(currentState);
+                    redState.notifyObservers();
+                    notifyObservers();
                     //TODO useful to update the current state and the old one
+                    //System.out.println ("The state of the target changed to red");
                     return redState;
                 }else {
                     previousState = currentState;
-                    notifyObservers(currentState);
+                    greenState.notifyObservers();
+                    notifyObservers();
                     //TODO useful to update the current state and the old one
+                    //System.out.println ("The state of the target changed to green");
                     return greenState;
                 }
             }
